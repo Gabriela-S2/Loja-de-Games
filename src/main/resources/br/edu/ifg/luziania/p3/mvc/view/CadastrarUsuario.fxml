@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane prefHeight="400.0" prefWidth="650.0" style="-fx-background-color: black;"
+           stylesheets="@style.css"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="br.edu.ifg.luziania.p3.mvc.controller.CadastroController">
+    <children>
+        <VBox alignment="CENTER" maxWidth="380.0" spacing="10.0"
+              style="-fx-background-color: #171a21; -fx-padding: 30; -fx-background-radius: 10;">
+            <children>
+                <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
+                    <image><Image url="@img/logo-steam.png" /></image>
+                </ImageView>
+
+                <Label text="CRIAR CONTA" textFill="WHITE">
+                    <font><Font name="System Bold" size="18.0" /></font>
+                </Label>
+
+                <!-- Mensagem de feedback (erro ou sucesso) -->
+                <Label fx:id="lblMensagemErro" maxWidth="320.0" wrapText="true" />
+
+                <!-- Nome de usuário -->
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <children>
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Nome de usuário:" textFill="WHITE">
+                                    <font><Font size="13.0" /></font>
+                                </Label>
+                                <TextField fx:id="txtUsuario" prefHeight="31.0" prefWidth="290.0"
+                                           promptText="Escolha um nome de usuário"
+                                           style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+                            </children>
+                        </VBox>
+                        <ImageView fx:id="imgUserVerificado" fitHeight="20.0" fitWidth="20.0"
+                                   preserveRatio="true" visible="false">
+                            <image><Image url="@img/verificado.png" /></image>
+                        </ImageView>
+                    </children>
+                </HBox>
+
+                <!-- Email -->
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <children>
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="E-mail:" textFill="WHITE">
+                                    <font><Font size="13.0" /></font>
+                                </Label>
+                                <TextField fx:id="txtEmail" prefHeight="31.0" prefWidth="290.0"
+                                           promptText="seu@email.com"
+                                           style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+                            </children>
+                        </VBox>
+                        <ImageView fx:id="imgEmailVerificado" fitHeight="20.0" fitWidth="20.0"
+                                   preserveRatio="true" visible="false">
+                            <image><Image url="@img/verificado.png" /></image>
+                        </ImageView>
+                    </children>
+                </HBox>
+
+                <!-- Senha -->
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <children>
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Senha:" textFill="WHITE">
+                                    <font><Font size="13.0" /></font>
+                                </Label>
+                                <PasswordField fx:id="txtSenha" prefHeight="31.0" prefWidth="290.0"
+                                               promptText="Mínimo 8 caracteres com letras e números"
+                                               style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+                            </children>
+                        </VBox>
+                        <ImageView fx:id="imgSenhaVerificada" fitHeight="20.0" fitWidth="20.0"
+                                   preserveRatio="true" visible="false">
+                            <image><Image url="@img/verificado.png" /></image>
+                        </ImageView>
+                    </children>
+                </HBox>
+
+                <!-- Confirmar senha -->
+                <VBox spacing="3.0">
+                    <children>
+                        <Label text="Confirmar senha:" textFill="WHITE">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <PasswordField fx:id="txtConfirmarSenha" prefHeight="31.0" prefWidth="290.0"
+                                       promptText="Repita a senha"
+                                       style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+                    </children>
+                </VBox>
+
+                <Button maxWidth="Infinity" mnemonicParsing="false"
+                        onAction="#salvarUsuario" prefHeight="38.0"
+                        style="-fx-background-color: #4c6b22; -fx-font-weight: bold;"
+                        text="Cadastrar" textFill="WHITE">
+                    <cursor><Cursor fx:constant="HAND" /></cursor>
+                    <font><Font size="16.0" /></font>
+                </Button>
+
+                <HBox alignment="CENTER" spacing="5.0">
+                    <children>
+                        <Label text="Já tem uma conta?" textFill="WHITE">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <Hyperlink onAction="#irParaLogin" text="Fazer login"
+                                   textFill="#66c0f4" underline="true">
+                            <font><Font size="13.0" /></font>
+                        </Hyperlink>
+                    </children>
+                </HBox>
+            </children>
+            <effect><DropShadow color="#000000bb" radius="15" /></effect>
+        </VBox>
+    </children>
+</StackPane>

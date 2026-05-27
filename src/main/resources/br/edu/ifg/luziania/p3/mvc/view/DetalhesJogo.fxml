@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<Pane prefHeight="400.0" prefWidth="650.0"
+      style="-fx-background-color: #1b2838;"
+      stylesheets="@style.css"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="br.edu.ifg.luziania.p3.mvc.controller.DetalhesJogoController">
+    <children>
+
+        <!-- BARRA SUPERIOR -->
+        <HBox alignment="CENTER_LEFT" layoutX="0.0" layoutY="0.0"
+              prefHeight="50.0" prefWidth="650.0"
+              style="-fx-background-color: #171a21; -fx-padding: 0 10 0 0;" spacing="8.0">
+            <children>
+                <ImageView fitHeight="45.0" fitWidth="50.0" preserveRatio="true">
+                    <image><Image url="@img/logo-steam.png" /></image>
+                </ImageView>
+                <Button mnemonicParsing="false" onAction="#voltarParaLoja"
+                        style="-fx-background-color: transparent; -fx-font-weight: bold;"
+                        text="◀  LOJA" textFill="#66c0f4">
+                    <cursor><Cursor fx:constant="HAND" /></cursor>
+                </Button>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Circle fill="DODGERBLUE" radius="18.0" stroke="#66c0f4" strokeWidth="2.0" />
+            </children>
+        </HBox>
+
+        <!-- COLUNA LATERAL ESQUERDA -->
+        <VBox layoutX="0.0" layoutY="50.0" prefHeight="350.0" prefWidth="130.0"
+              style="-fx-background-color: #171a21; -fx-padding: 15 5 10 10;" spacing="6.0">
+            <children>
+                <!-- Capa menor na sidebar -->
+                <ImageView fx:id="imgCapa" fitHeight="150.0" fitWidth="110.0"
+                           pickOnBounds="true" preserveRatio="true" />
+                <Label fx:id="lblPreco" textFill="#66c0f4" wrapText="true">
+                    <font><Font name="System Bold" size="13.0" /></font>
+                </Label>
+                <Label fx:id="lblTempoJogado" textFill="#8f98a0" wrapText="true" visible="false">
+                    <font><Font size="11.0" /></font>
+                </Label>
+            </children>
+        </VBox>
+
+        <!-- ÁREA PRINCIPAL -->
+        <VBox layoutX="130.0" layoutY="50.0" prefHeight="350.0" prefWidth="520.0"
+              style="-fx-background-color: #1b2838; -fx-padding: 15;" spacing="12.0">
+            <children>
+                <!-- Imagem grande do jogo -->
+                <ImageView fx:id="imgCapaGrande" fitHeight="220.0" fitWidth="490.0"
+                           pickOnBounds="true" preserveRatio="true" />
+
+                <!-- Título + botão de ação -->
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <children>
+                        <Label fx:id="lblTitulo" textFill="WHITE" HBox.hgrow="ALWAYS" wrapText="true">
+                            <font><Font name="System Bold" size="18.0" /></font>
+                        </Label>
+                        <Button fx:id="btnAcao" mnemonicParsing="false" onAction="#executarAcao"
+                                prefHeight="36.0" prefWidth="130.0"
+                                style="-fx-background-color: #66c0f4; -fx-font-weight: bold;"
+                                textFill="WHITE">
+                            <cursor><Cursor fx:constant="HAND" /></cursor>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+    </children>
+</Pane>

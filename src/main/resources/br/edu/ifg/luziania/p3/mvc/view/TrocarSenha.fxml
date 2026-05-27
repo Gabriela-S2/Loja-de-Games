@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane prefHeight="400.0" prefWidth="650.0" style="-fx-background-color: black;"
+           stylesheets="@style.css"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="br.edu.ifg.luziania.p3.mvc.controller.TrocarSenhaController">
+    <children>
+        <VBox alignment="CENTER" maxWidth="380.0" spacing="15.0"
+              style="-fx-background-color: #171a21; -fx-padding: 30; -fx-background-radius: 10;">
+            <children>
+                <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
+                    <image><Image url="@img/logo-steam.png" /></image>
+                </ImageView>
+
+                <Label text="RECUPERAR SENHA" textFill="WHITE">
+                    <font><Font name="System Bold" size="18.0" /></font>
+                </Label>
+
+                <Label fx:id="lblMensagem" maxWidth="320.0" wrapText="true" visible="false" managed="false" />
+
+                <!-- ETAPA 1: Identificação -->
+                <VBox fx:id="etapa1" spacing="10.0">
+                    <children>
+                        <Label text="Informe seu e-mail ou nome de usuário:" textFill="#c6d4df">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <TextField fx:id="txtIdentificacao" prefHeight="31.0" prefWidth="320.0"
+                                   promptText="E-mail ou nome de usuário"
+                                   style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false"
+                                onAction="#enviarCodigo" prefHeight="36.0"
+                                style="-fx-background-color: #4c6b22; -fx-font-weight: bold;"
+                                text="Enviar Código" textFill="WHITE">
+                            <cursor><Cursor fx:constant="HAND" /></cursor>
+                        </Button>
+                    </children>
+                </VBox>
+
+                <!-- ETAPA 2: Código + nova senha -->
+                <VBox fx:id="etapa2" spacing="10.0" visible="false" managed="false">
+                    <children>
+                        <Label text="Código recebido por e-mail:" textFill="#c6d4df">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <TextField fx:id="txtCodigo" prefHeight="31.0" prefWidth="320.0"
+                                   promptText="000000"
+                                   style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+
+                        <Label text="Nova senha:" textFill="#c6d4df">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <PasswordField fx:id="txtNovaSenha" prefHeight="31.0" prefWidth="320.0"
+                                       promptText="Mínimo 8 caracteres com letras e números"
+                                       style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+
+                        <Label text="Confirmar nova senha:" textFill="#c6d4df">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <PasswordField fx:id="txtConfirmarNovaSenha" prefHeight="31.0" prefWidth="320.0"
+                                       promptText="Repita a senha"
+                                       style="-fx-background-color: #32353c; -fx-text-fill: white;" />
+
+                        <Button maxWidth="Infinity" mnemonicParsing="false"
+                                onAction="#redefinirSenha" prefHeight="36.0"
+                                style="-fx-background-color: #4c6b22; -fx-font-weight: bold;"
+                                text="Redefinir Senha" textFill="WHITE">
+                            <cursor><Cursor fx:constant="HAND" /></cursor>
+                        </Button>
+
+                        <Hyperlink onAction="#reenviarCodigo" text="Não recebi o código — tentar novamente"
+                                   textFill="#66c0f4" underline="true" />
+                    </children>
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="5.0">
+                    <children>
+                        <Label text="Lembrou a senha?" textFill="WHITE">
+                            <font><Font size="13.0" /></font>
+                        </Label>
+                        <Hyperlink onAction="#irParaLogin" text="Fazer login"
+                                   textFill="#66c0f4" underline="true">
+                            <font><Font size="13.0" /></font>
+                        </Hyperlink>
+                    </children>
+                </HBox>
+            </children>
+            <effect><DropShadow color="#000000bb" radius="15" /></effect>
+        </VBox>
+    </children>
+</StackPane>
