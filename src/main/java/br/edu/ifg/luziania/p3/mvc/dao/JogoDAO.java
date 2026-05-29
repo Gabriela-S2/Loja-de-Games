@@ -1,106 +1,144 @@
 package br.edu.ifg.luziania.p3.mvc.dao;
 
 import br.edu.ifg.luziania.p3.mvc.model.Jogo;
-import br.edu.ifg.luziania.p3.mvc.model.Jogo.StatusJogo;
+import br.edu.ifg.luziania.p3.mvc.model.JogoMidia;
+import br.edu.ifg.luziania.p3.mvc.util.LogUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JogoDAO {
 
-    // Método para carregar o catálogo na StoreController
+    // ──────────────────────────────────────────
+    //  Listar todos os jogos
+    // ──────────────────────────────────────────
+
     public List<Jogo> listarTodos() {
-        List<Jogo> jogos = new ArrayList<>();
-        String sql = "SELECT * FROM jogos";
-
+        List<Jogo> lista = new ArrayList<>();
+        String sql = """
+            SELECT id, titulo, descricao, preco, caminho_imagem,
+                   caminho_imagem_horizontal, caminho_imagem_vertical,
+                   status, tempo_jogado_segundos, genero
+            FROM jogos
+            ORDER BY titulo
+            """;
         try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String titulo = rs.getString("titulo");
-                double preco = rs.getDouble("preco");
-                String caminhoImagem = rs.getString("caminho_imagem");
-                String statusStr = rs.getString("status");
-                long tempoJogado = rs.getLong("tempo_jogado_segundos");
-
-                // Converte a String do banco para o Enum do Java
-                StatusJogo status;
-
-                try {
-                    // Tenta converter, garantindo que esteja em maiúsculo e sem espaços
-                    status = StatusJogo.valueOf(statusStr != null ? statusStr.trim().toUpperCase() : "NAO_COMPRADO");
-                } catch (IllegalArgumentException ex) {
-                    // Se vier um lixo do banco, assume o padrão para não travar a aplicação
-                    status = StatusJogo.NAO_COMPRADO;
-                }
-
-                // Instancia o jogo e seta o tempo
-                Jogo jogo = new Jogo(id, titulo, preco, caminhoImagem, status);
-                jogo.adicionarTempoJogado(tempoJogado);
-
-                jogos.add(jogo);
-            }
-
-            registrarLogUso("Listagem de jogos carregada com sucesso.");
+            while (rs.next()) lista.add(mapearJogo(rs));
 
         } catch (SQLException e) {
-            registrarLogExcecao("Erro ao listar jogos do catálogo", e); // Requisito 6
+            LogUtil.registrarErro("JogoDAO.listarTodos", e);
         }
-
-        return jogos;
+        return lista;
     }
 
-    // Método para atualizar se o jogo foi comprado ou instalado
+    // ──────────────────────────────────────────
+    //  Buscar jogo por ID
+    // ──────────────────────────────────────────
+
+    public Jogo buscarPorId(int id) {
+        String sql = """
+            SELECT id, titulo, descricao, preco, caminho_imagem,
+                   caminho_imagem_horizontal, caminho_imagem_vertical,
+                   status, tempo_jogado_segundos, genero
+            FROM jogos WHERE id = ?
+            """;
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapearJogo(rs);
+            }
+        } catch (SQLException e) {
+            LogUtil.registrarErro("JogoDAO.buscarPorId", e);
+        }
+        return null;
+    }
+
+    // ──────────────────────────────────────────
+    //  Atualizar status
+    // ──────────────────────────────────────────
+
     public void atualizarStatus(Jogo jogo) {
         String sql = "UPDATE jogos SET status = ? WHERE id = ?";
-
         try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, jogo.getStatus().name()); // Salva o Enum como String
-            stmt.setInt(2, jogo.getId());
-
-            stmt.executeUpdate();
-            registrarLogUso("Status do jogo '" + jogo.getTitulo() + "' atualizado para: " + jogo.getStatus());
-
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, jogo.getStatus().name());
+            ps.setInt(2, jogo.getId());
+            ps.executeUpdate();
         } catch (SQLException e) {
-            registrarLogExcecao("Erro ao atualizar status do jogo: " + jogo.getTitulo(), e); // Requisito 6[cite: 2]
+            LogUtil.registrarErro("JogoDAO.atualizarStatus", e);
         }
     }
 
-    // Método para salvar os segundos jogados quando a sessão for encerrada
+    // ──────────────────────────────────────────
+    //  Atualizar tempo jogado
+    // ──────────────────────────────────────────
+
     public void atualizarTempoJogado(Jogo jogo) {
         String sql = "UPDATE jogos SET tempo_jogado_segundos = ? WHERE id = ?";
-
         try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, jogo.getTempoJogadoSegundos());
-            stmt.setInt(2, jogo.getId());
-
-            stmt.executeUpdate();
-            registrarLogUso("Tempo jogado do jogo '" + jogo.getTitulo() + "' atualizado no banco.");
-
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, jogo.getTempoJogadoSegundos());
+            ps.setInt(2, jogo.getId());
+            ps.executeUpdate();
         } catch (SQLException e) {
-            registrarLogExcecao("Erro ao atualizar tempo jogado do jogo: " + jogo.getTitulo(), e); // Requisito 6[cite: 2]
+            LogUtil.registrarErro("JogoDAO.atualizarTempoJogado", e);
         }
     }
 
-    // --- Métodos de Log de Arquivo ---
+    // ──────────────────────────────────────────
+    //  Listar mídias de um jogo (carrossel)
+    // ──────────────────────────────────────────
 
-    private void registrarLogUso(String acao) {
-        // Implementar a gravação no arquivo .txt aqui (Requisito 5)[cite: 2]
-        System.out.println("[DAO LOG] " + acao);
+    public List<JogoMidia> listarMidias(int jogoId) {
+        List<JogoMidia> lista = new ArrayList<>();
+        String sql = """
+            SELECT id, jogo_id, tipo, caminho, ordem
+            FROM jogo_midias
+            WHERE jogo_id = ?
+            ORDER BY ordem
+            """;
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, jogoId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new JogoMidia(
+                            rs.getInt("id"),
+                            rs.getInt("jogo_id"),
+                            rs.getString("tipo"),
+                            rs.getString("caminho"),
+                            rs.getInt("ordem")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            LogUtil.registrarErro("JogoDAO.listarMidias", e);
+        }
+        return lista;
     }
 
-    private void registrarLogExcecao(String acao, Exception e) {
-        // Implementar a gravação no arquivo de erro .txt aqui (Requisito 6)[cite: 2]
-        System.err.println("[DAO ERRO] " + acao + " - " + e.getMessage());
+    // ──────────────────────────────────────────
+    //  Mapeamento ResultSet → Jogo
+    // ──────────────────────────────────────────
+
+    private Jogo mapearJogo(ResultSet rs) throws SQLException {
+        Jogo j = new Jogo(
+                rs.getInt("id"),
+                rs.getString("titulo"),
+                rs.getDouble("preco"),
+                rs.getString("caminho_imagem"),
+                Jogo.StatusJogo.valueOf(rs.getString("status"))
+        );
+        j.setDescricao(rs.getString("descricao"));
+        j.setGenero(rs.getString("genero"));
+        j.setCaminhoImagemHorizontal(rs.getString("caminho_imagem_horizontal"));
+        j.setCaminhoImagemVertical(rs.getString("caminho_imagem_vertical"));
+        j.setTempoJogadoSegundos(rs.getLong("tempo_jogado_segundos"));
+        return j;
     }
 }

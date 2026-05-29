@@ -6,119 +6,234 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="450.0" prefWidth="750.0" style="-fx-background-color: #1b2838;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifg.luziania.p3.mvc.controller.StoreController">
+<AnchorPane
+        style="-fx-background-color: #1b2838;"
+        stylesheets="@style.css"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="br.edu.ifg.luziania.p3.mvc.controller.StoreController">
 
-    <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="8.0" style="-fx-background-color: #171a21; -fx-padding: 0 15 0 0;" BorderPane.alignment="CENTER">
+    <children>
+
+        <!-- ══════════════════════════════════════════
+             BARRA SUPERIOR  (altura fixa 50 px)
+        ══════════════════════════════════════════ -->
+        <HBox fx:id="topBar"
+              alignment="CENTER_LEFT"
+              spacing="0"
+              style="-fx-background-color: #171a21;"
+              prefHeight="50.0"
+              AnchorPane.topAnchor="0"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0">
             <children>
-                <ImageView fitHeight="45.0" fitWidth="50.0" preserveRatio="true">
-                    <image><Image url="@img/logo-steam.png" /></image>
+
+                <!-- Logo -->
+                <ImageView fitHeight="40.0" fitWidth="44.0" preserveRatio="true"
+                           style="-fx-padding: 0 6 0 8;">
+                    <image><Image url="@img/logo-steam.png"/></image>
+                    <HBox.margin><Insets left="8" right="4"/></HBox.margin>
                 </ImageView>
 
-                <Button fx:id="btnAbaStore" mnemonicParsing="false" onAction="#mostrarStore" prefHeight="50.0" style="-fx-background-color: #c7d5e0; -fx-font-weight: bold; -fx-background-radius: 0;" text="STORE" textFill="#1b2838">
-                    <cursor><Cursor fx:constant="HAND" /></cursor>
+                <!-- Aba STORE -->
+                <Button fx:id="btnAbaStore"
+                        text="STORE"
+                        prefHeight="50.0" prefWidth="90.0"
+                        mnemonicParsing="false"
+                        onAction="#mostrarStore"
+                        style="-fx-background-color: #c7d5e0; -fx-text-fill: #1b2838;
+                       -fx-font-weight: bold; -fx-background-radius: 0;
+                       -fx-font-size: 13;">
+                    <cursor><Cursor fx:constant="HAND"/></cursor>
                 </Button>
-                <Button fx:id="btnAbaBiblioteca" mnemonicParsing="false" onAction="#mostrarBiblioteca" prefHeight="50.0" style="-fx-background-color: transparent; -fx-font-weight: bold; -fx-background-radius: 0;" text="BIBLIOTECA" textFill="#c7d5e0">
-                    <cursor><Cursor fx:constant="HAND" /></cursor>
+
+                <!-- Aba BIBLIOTECA -->
+                <Button fx:id="btnAbaBiblioteca"
+                        text="BIBLIOTECA"
+                        prefHeight="50.0" prefWidth="110.0"
+                        mnemonicParsing="false"
+                        onAction="#mostrarBiblioteca"
+                        style="-fx-background-color: transparent; -fx-text-fill: #c7d5e0;
+                       -fx-font-weight: bold; -fx-background-radius: 0;
+                       -fx-font-size: 13;">
+                    <cursor><Cursor fx:constant="HAND"/></cursor>
                 </Button>
 
-                <Pane HBox.hgrow="ALWAYS" />
+                <!-- Espaçador flexível -->
+                <Pane HBox.hgrow="ALWAYS"/>
 
-                <TextField fx:id="txtBusca" onKeyReleased="#filtrarJogos" prefHeight="26.0" prefWidth="220.0" promptText="Pesquisar jogos..." style="-fx-background-color: #32353c; -fx-text-fill: white; -fx-prompt-text-fill: #8f98a0;" />
+                <!-- Campo de busca -->
+                <TextField fx:id="txtBusca"
+                           promptText="Pesquisar jogos..."
+                           prefHeight="28.0" prefWidth="200.0"
+                           style="-fx-background-color: #32353c; -fx-text-fill: white;
+                          -fx-prompt-text-fill: #8f98a0;"
+                           onKeyReleased="#filtrarJogos">
+                    <HBox.margin><Insets right="12"/></HBox.margin>
+                </TextField>
 
-                <Circle fx:id="circuloUsuario" onMouseClicked="#abrirEditarPerfil" radius="18.0" stroke="#656565" strokeWidth="2.0">
+                <!-- Avatar + nome -->
+                <Circle fx:id="circuloUsuario" onMouseClicked="#abrirMenuPerfil" radius="18.0" stroke="#656565" strokeWidth="2.0">
                     <cursor><Cursor fx:constant="HAND" /></cursor>
                 </Circle>
-
-                <Label fx:id="lblNomeUsuario" style="-fx-font-size: 12;" textFill="#c7d5e0">
-                    <font><Font size="12.0" /></font>
+                <Label fx:id="lblNomeUsuario"
+                       textFill="#c7d5e0"
+                       style="-fx-font-size: 12; -fx-font-weight: bold;">
+                    <HBox.margin><Insets right="14"/></HBox.margin>
                 </Label>
+
             </children>
         </HBox>
-    </top>
 
-    <left>
-        <VBox prefWidth="140.0" spacing="5.0" style="-fx-background-color: #171a21; -fx-padding: 10 5 10 10;" BorderPane.alignment="CENTER">
+        <!-- ══════════════════════════════════════════
+             CORPO  (abaixo da topbar)
+        ══════════════════════════════════════════ -->
+        <HBox AnchorPane.topAnchor="50"
+              AnchorPane.bottomAnchor="0"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0">
             <children>
-                <Label fx:id="lblTituloLateral" text="SEUS JOGOS" textFill="#8f98a0">
-                    <font><Font name="System Bold" size="11.0" /></font>
-                </Label>
-                <Separator />
-                <ScrollPane hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-                    <content>
-                        <VBox fx:id="boxSeusJogos" spacing="4.0" />
-                    </content>
-                </ScrollPane>
-            </children>
-        </VBox>
-    </left>
 
-    <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: #1b2838;" vbarPolicy="AS_NEEDED" BorderPane.alignment="CENTER">
-            <content>
-                <VBox spacing="20.0" style="-fx-background-color: #1b2838; -fx-padding: 15;">
+                <!-- ── BARRA LATERAL ── -->
+                <VBox prefWidth="135.0"
+                      minWidth="120.0" maxWidth="160.0"
+                      style="-fx-background-color: #171a21; -fx-padding: 12 8 12 10;"
+                      spacing="6.0">
                     <children>
-
-                        <VBox fx:id="viewStore" spacing="15.0" VBox.vgrow="ALWAYS">
-                            <children>
-
-                                <GridPane hgap="12.0" maxHeight="-Infinity" maxWidth="1050.0" vgap="12.0">
-                                    <columnConstraints>
-                                        <ColumnConstraints percentWidth="65.0" />
-                                        <ColumnConstraints percentWidth="35.0" />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                    </rowConstraints>
-                                    <children>
-
-                                        <VBox fx:id="boxBannerPrincipal" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="2">
-                                            <ImageView fitWidth="${boxBannerPrincipal.width}" pickOnBounds="true" preserveRatio="true">
-                                                <image><Image url="@img/spiderman.png" /></image>
-                                            </ImageView>
-                                        </VBox>
-
-                                        <VBox fx:id="boxBannerTop" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                            <ImageView fitWidth="${boxBannerTop.width}" pickOnBounds="true" preserveRatio="true">
-                                                <image><Image url="@img/fortnite.png" /></image>
-                                            </ImageView>
-                                        </VBox>
-
-                                        <VBox fx:id="boxBannerBot" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                            <ImageView fitWidth="${boxBannerBot.width}" pickOnBounds="true" preserveRatio="true">
-                                                <image><Image url="@img/hogwarts-legacy.png" /></image>
-                                            </ImageView>
-                                        </VBox>
-
-                                    </children>
-                                </GridPane>
-
-                                <Label text="Explorar o Catálogo" textFill="WHITE">
-                                    <font><Font name="System Bold" size="15.0" /></font>
-                                </Label>
-
-                                <FlowPane fx:id="containerCatalogo" hgap="12.0" maxWidth="Infinity" vgap="12.0" />
-                            </children>
-                        </VBox>
-
-                        <VBox fx:id="viewBiblioteca" managed="false" spacing="15.0" visible="false" VBox.vgrow="ALWAYS">
-                            <children>
-                                <Label text="Minha Biblioteca" textFill="WHITE">
-                                    <font><Font name="System Bold" size="15.0" /></font>
-                                </Label>
-                                <Label fx:id="lblSemJogos" managed="false" text="Você ainda não possui jogos instalados." textFill="#8f98a0" visible="false">
-                                    <font><Font size="13.0" /></font>
-                                </Label>
-                                <FlowPane fx:id="containerBiblioteca" hgap="12.0" maxWidth="Infinity" vgap="12.0" />
-                            </children>
-                        </VBox>
-
+                        <Label fx:id="lblTituloLateral"
+                               text="SEUS JOGOS"
+                               textFill="#8f98a0"
+                               style="-fx-font-weight: bold; -fx-font-size: 11;">
+                        </Label>
+                        <Separator/>
+                        <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER"
+                                    style="-fx-background-color: transparent; -fx-background: transparent;"
+                                    VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox fx:id="boxSeusJogos" spacing="4.0"/>
+                            </content>
+                        </ScrollPane>
                     </children>
                 </VBox>
-            </content>
-        </ScrollPane>
-    </center>
 
-</BorderPane>
+                <!-- ── ÁREA PRINCIPAL ── -->
+                <ScrollPane hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                            style="-fx-background-color: transparent; -fx-background: #1b2838;"
+                            fitToWidth="true"
+                            HBox.hgrow="ALWAYS">
+                    <content>
+                        <VBox style="-fx-background-color: #1b2838; -fx-padding: 16;"
+                              spacing="18.0">
+                            <children>
+
+                                <!-- ═══ VIEW STORE ═══ -->
+                                <VBox fx:id="viewStore" spacing="14.0">
+                                    <children>
+
+                                        <!-- BANNER: 1 imagem grande (esq) + 2 menores (dir) -->
+                                        <!-- Responsivo: HBox com percentagens via ColumnConstraints não existe
+                                             em HBox puro; usamos GridPane para o banner. -->
+                                        <GridPane hgap="8.0" vgap="8.0">
+                                            <columnConstraints>
+                                                <!-- coluna esquerda: ~58% -->
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="58.0"/>
+                                                <!-- coluna direita:  ~42% -->
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="42.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints vgrow="ALWAYS" percentHeight="50.0"/>
+                                                <RowConstraints vgrow="ALWAYS" percentHeight="50.0"/>
+                                            </rowConstraints>
+                                            <children>
+
+                                                <!-- Banner principal (ocupa 2 linhas à esquerda) -->
+                                                <StackPane GridPane.columnIndex="0"
+                                                           GridPane.rowIndex="0"
+                                                           GridPane.rowSpan="2"
+                                                           style="-fx-cursor: hand;"
+                                                           onMouseClicked="#abrirJogoBannerPrincipal">
+                                                    <children>
+                                                        <ImageView fx:id="imgBannerPrincipal"
+                                                                   fitWidth="9999" fitHeight="230.0"
+                                                                   preserveRatio="false"
+                                                                   style="-fx-effect: dropshadow(gaussian,black,6,0.4,0,2);">
+                                                            <StackPane.margin><Insets/></StackPane.margin>
+                                                        </ImageView>
+                                                    </children>
+                                                </StackPane>
+
+                                                <!-- Banner secundário 1 -->
+                                                <StackPane GridPane.columnIndex="1"
+                                                           GridPane.rowIndex="0"
+                                                           style="-fx-cursor: hand;"
+                                                           onMouseClicked="#abrirJogoBannerSecundario1">
+                                                    <children>
+                                                        <ImageView fx:id="imgBannerSecundario1"
+                                                                   fitWidth="9999" fitHeight="111.0"
+                                                                   preserveRatio="false"/>
+                                                    </children>
+                                                </StackPane>
+
+                                                <!-- Banner secundário 2 -->
+                                                <StackPane GridPane.columnIndex="1"
+                                                           GridPane.rowIndex="1"
+                                                           style="-fx-cursor: hand;"
+                                                           onMouseClicked="#abrirJogoBannerSecundario2">
+                                                    <children>
+                                                        <ImageView fx:id="imgBannerSecundario2"
+                                                                   fitWidth="9999" fitHeight="111.0"
+                                                                   preserveRatio="false"/>
+                                                    </children>
+                                                </StackPane>
+
+                                            </children>
+                                        </GridPane>
+
+                                        <!-- Título catálogo -->
+                                        <Label text="Explorar o Catálogo"
+                                               textFill="WHITE"
+                                               style="-fx-font-weight: bold; -fx-font-size: 15;"/>
+
+                                        <!-- Cards verticais (preenchidos pelo controller) -->
+                                        <FlowPane fx:id="containerCatalogo"
+                                                  hgap="10.0" vgap="14.0"
+                                                  prefWrapLength="9999"/>
+
+                                    </children>
+                                </VBox>
+
+                                <!-- ═══ VIEW BIBLIOTECA ═══ -->
+                                <VBox fx:id="viewBiblioteca"
+                                      spacing="14.0"
+                                      visible="false" managed="false">
+                                    <children>
+                                        <Label text="Minha Biblioteca"
+                                               textFill="WHITE"
+                                               style="-fx-font-weight: bold; -fx-font-size: 15;"/>
+                                        <Label fx:id="lblSemJogos"
+                                               text="Você ainda não possui jogos instalados."
+                                               textFill="#8f98a0"
+                                               style="-fx-font-size: 13;"
+                                               visible="false" managed="false"/>
+                                        <FlowPane fx:id="containerBiblioteca"
+                                                  hgap="10.0" vgap="14.0"
+                                                  prefWrapLength="9999"/>
+                                    </children>
+                                </VBox>
+
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
+            </children>
+        </HBox>
+
+    </children>
+</AnchorPane>

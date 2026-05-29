@@ -7,73 +7,222 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<Pane prefHeight="400.0" prefWidth="650.0"
-      style="-fx-background-color: #1b2838;"
-      stylesheets="@style.css"
-      xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="br.edu.ifg.luziania.p3.mvc.controller.DetalhesJogoController">
+<AnchorPane
+        style="-fx-background-color: #1b2838;"
+        stylesheets="@style.css"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="br.edu.ifg.luziania.p3.mvc.controller.DetalhesJogoController">
+
     <children>
 
-        <!-- BARRA SUPERIOR -->
-        <HBox alignment="CENTER_LEFT" layoutX="0.0" layoutY="0.0"
-              prefHeight="50.0" prefWidth="650.0"
-              style="-fx-background-color: #171a21; -fx-padding: 0 10 0 0;" spacing="8.0">
+        <!-- ══════════════════════════════════════════
+             BARRA SUPERIOR (idêntica à Store)
+        ══════════════════════════════════════════ -->
+        <HBox alignment="CENTER_LEFT"
+              spacing="0"
+              style="-fx-background-color: #171a21;"
+              prefHeight="50.0"
+              AnchorPane.topAnchor="0"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0">
             <children>
-                <ImageView fitHeight="45.0" fitWidth="50.0" preserveRatio="true">
-                    <image><Image url="@img/logo-steam.png" /></image>
+
+                <ImageView fitHeight="40.0" fitWidth="44.0" preserveRatio="true">
+                    <image><Image url="@img/logo-steam.png"/></image>
+                    <HBox.margin><Insets left="8" right="4"/></HBox.margin>
                 </ImageView>
-                <Button mnemonicParsing="false" onAction="#voltarParaLoja"
-                        style="-fx-background-color: transparent; -fx-font-weight: bold;"
-                        text="◀  LOJA" textFill="#66c0f4">
-                    <cursor><Cursor fx:constant="HAND" /></cursor>
+
+                <!-- Botão voltar (funciona como aba Store) -->
+                <Button text="STORE"
+                        prefHeight="50.0" prefWidth="90.0"
+                        mnemonicParsing="false"
+                        onAction="#voltarParaLoja"
+                        style="-fx-background-color: transparent; -fx-text-fill: #c7d5e0;
+                       -fx-font-weight: bold; -fx-background-radius: 0; -fx-font-size: 13;">
+                    <cursor><Cursor fx:constant="HAND"/></cursor>
                 </Button>
-                <Pane HBox.hgrow="ALWAYS" />
-                <Circle fill="DODGERBLUE" radius="18.0" stroke="#66c0f4" strokeWidth="2.0" />
+
+                <Button text="BIBLIOTECA"
+                        prefHeight="50.0" prefWidth="110.0"
+                        mnemonicParsing="false"
+                        onAction="#voltarParaBiblioteca"
+                        style="-fx-background-color: transparent; -fx-text-fill: #c7d5e0;
+                       -fx-font-weight: bold; -fx-background-radius: 0; -fx-font-size: 13;">
+                    <cursor><Cursor fx:constant="HAND"/></cursor>
+                </Button>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <TextField fx:id="txtBusca"
+                           promptText="Pesquisar jogos..."
+                           prefHeight="28.0" prefWidth="200.0"
+                           style="-fx-background-color: #32353c; -fx-text-fill: white;
+                          -fx-prompt-text-fill: #8f98a0;">
+                    <HBox.margin><Insets right="12"/></HBox.margin>
+                </TextField>
+
+                <ImageView fx:id="imgAvatar"
+                           fitHeight="34.0" fitWidth="34.0" preserveRatio="true">
+                    <HBox.margin><Insets right="6"/></HBox.margin>
+                </ImageView>
+                <Label fx:id="lblNomeUsuario" textFill="#c7d5e0"
+                       style="-fx-font-size: 12; -fx-font-weight: bold;">
+                    <HBox.margin><Insets right="14"/></HBox.margin>
+                </Label>
+
             </children>
         </HBox>
 
-        <!-- COLUNA LATERAL ESQUERDA -->
-        <VBox layoutX="0.0" layoutY="50.0" prefHeight="350.0" prefWidth="130.0"
-              style="-fx-background-color: #171a21; -fx-padding: 15 5 10 10;" spacing="6.0">
+        <!-- ══════════════════════════════════════════
+             CORPO
+        ══════════════════════════════════════════ -->
+        <HBox AnchorPane.topAnchor="50"
+              AnchorPane.bottomAnchor="0"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0">
             <children>
-                <!-- Capa menor na sidebar -->
-                <ImageView fx:id="imgCapa" fitHeight="150.0" fitWidth="110.0"
-                           pickOnBounds="true" preserveRatio="true" />
-                <Label fx:id="lblPreco" textFill="#66c0f4" wrapText="true">
-                    <font><Font name="System Bold" size="13.0" /></font>
-                </Label>
-                <Label fx:id="lblTempoJogado" textFill="#8f98a0" wrapText="true" visible="false">
-                    <font><Font size="11.0" /></font>
-                </Label>
-            </children>
-        </VBox>
 
-        <!-- ÁREA PRINCIPAL -->
-        <VBox layoutX="130.0" layoutY="50.0" prefHeight="350.0" prefWidth="520.0"
-              style="-fx-background-color: #1b2838; -fx-padding: 15;" spacing="12.0">
-            <children>
-                <!-- Imagem grande do jogo -->
-                <ImageView fx:id="imgCapaGrande" fitHeight="220.0" fitWidth="490.0"
-                           pickOnBounds="true" preserveRatio="true" />
-
-                <!-- Título + botão de ação -->
-                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <!-- ── BARRA LATERAL ── -->
+                <VBox prefWidth="135.0" minWidth="120.0" maxWidth="160.0"
+                      style="-fx-background-color: #171a21; -fx-padding: 12 8 12 10;"
+                      spacing="6.0">
                     <children>
-                        <Label fx:id="lblTitulo" textFill="WHITE" HBox.hgrow="ALWAYS" wrapText="true">
-                            <font><Font name="System Bold" size="18.0" /></font>
-                        </Label>
-                        <Button fx:id="btnAcao" mnemonicParsing="false" onAction="#executarAcao"
-                                prefHeight="36.0" prefWidth="130.0"
-                                style="-fx-background-color: #66c0f4; -fx-font-weight: bold;"
-                                textFill="WHITE">
-                            <cursor><Cursor fx:constant="HAND" /></cursor>
-                        </Button>
+                        <Label text="SEUS JOGOS" textFill="#8f98a0"
+                               style="-fx-font-weight: bold; -fx-font-size: 11;"/>
+                        <Separator/>
+                        <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER"
+                                    style="-fx-background-color: transparent; -fx-background: transparent;"
+                                    VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox fx:id="boxSeusJogos" spacing="4.0"/>
+                            </content>
+                        </ScrollPane>
                     </children>
-                </HBox>
+                </VBox>
+
+                <!-- ── ÁREA PRINCIPAL (scroll externo) ── -->
+                <ScrollPane hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                            style="-fx-background-color: transparent; -fx-background: #1b2838;"
+                            fitToWidth="true"
+                            HBox.hgrow="ALWAYS">
+                    <content>
+                        <VBox style="-fx-background-color: #1b2838; -fx-padding: 16;"
+                              spacing="0.0">
+                            <children>
+
+                                <!-- ─── BLOCO SUPERIOR: imagem vertical grande ─── -->
+                                <!-- Usamos um AnchorPane interno para que a imagem
+                                     preencha a largura disponível com altura proporcional. -->
+                                <StackPane fx:id="painelImagem"
+                                           style="-fx-background-color: #0a0f18;"
+                                           prefHeight="420.0">
+                                    <children>
+                                        <ImageView fx:id="imgCapaGrande"
+                                                   preserveRatio="true"
+                                                   smooth="true"
+                                                   fitHeight="420.0"
+                                                   fitWidth="9999"/>
+                                    </children>
+                                </StackPane>
+
+                                <!-- ─── RODAPÉ DA IMAGEM: título + tempo | botão ─── -->
+                                <HBox alignment="CENTER_LEFT"
+                                      style="-fx-background-color: #16202d; -fx-padding: 10 14 10 14;"
+                                      spacing="10.0">
+                                    <children>
+
+                                        <VBox HBox.hgrow="ALWAYS" spacing="2.0">
+                                            <children>
+                                                <Label fx:id="lblTitulo"
+                                                       textFill="WHITE"
+                                                       style="-fx-font-weight: bold; -fx-font-size: 18;"
+                                                       wrapText="true"/>
+                                                <Label fx:id="lblTempoJogado"
+                                                       textFill="#8f98a0"
+                                                       style="-fx-font-size: 12;"
+                                                       visible="false" managed="false"/>
+                                                <Label fx:id="lblPreco"
+                                                       textFill="#66c0f4"
+                                                       style="-fx-font-size: 14; -fx-font-weight: bold;"
+                                                       visible="false" managed="false"/>
+                                            </children>
+                                        </VBox>
+
+                                        <Button fx:id="btnAcao"
+                                                prefHeight="38.0" prefWidth="160.0"
+                                                mnemonicParsing="false"
+                                                onAction="#executarAcao"
+                                                style="-fx-font-weight: bold; -fx-font-size: 14;
+                                   -fx-background-radius: 4;"
+                                                textFill="WHITE">
+                                            <cursor><Cursor fx:constant="HAND"/></cursor>
+                                        </Button>
+
+                                    </children>
+                                </HBox>
+
+                                <!-- ─── DESCRIÇÃO + CARROSSEL ─── -->
+                                <VBox style="-fx-padding: 16 14 14 14;" spacing="14.0">
+                                    <children>
+
+                                        <!-- Descrição textual -->
+                                        <Label fx:id="lblDescricao"
+                                               textFill="#c6d4df"
+                                               style="-fx-font-size: 13;"
+                                               wrapText="true"/>
+
+                                        <!-- Carrossel de mídia -->
+                                        <VBox fx:id="painelCarrossel"
+                                              spacing="8.0"
+                                              visible="false" managed="false">
+                                            <children>
+                                                <Label text="Mídia"
+                                                       textFill="#8f98a0"
+                                                       style="-fx-font-weight: bold; -fx-font-size: 12;"/>
+                                                <!-- ScrollPane horizontal dos thumbs -->
+                                                <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
+                                                            prefHeight="130.0"
+                                                            style="-fx-background-color: transparent;
+                                           -fx-background: transparent;"
+                                                            fitToHeight="true">
+                                                    <content>
+                                                        <HBox fx:id="hboxMidias" spacing="8.0"
+                                                              style="-fx-padding: 4 0 4 0;"/>
+                                                    </content>
+                                                </ScrollPane>
+                                                <!-- Área de exibição ampliada da mídia selecionada -->
+                                                <StackPane fx:id="painelMidiaSelecionada"
+                                                           prefHeight="320.0"
+                                                           style="-fx-background-color: black;"
+                                                           visible="false" managed="false">
+                                                    <children>
+                                                        <ImageView fx:id="imgMidiaSelecionada"
+                                                                   fitHeight="320.0"
+                                                                   fitWidth="9999"
+                                                                   preserveRatio="true"
+                                                                   smooth="true"/>
+                                                    </children>
+                                                </StackPane>
+                                            </children>
+                                        </VBox>
+
+                                    </children>
+                                </VBox>
+
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
             </children>
-        </VBox>
+        </HBox>
 
     </children>
-</Pane>
+</AnchorPane>

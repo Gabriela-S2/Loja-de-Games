@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import br.edu.ifg.luziania.p3.mvc.model.Usuario;
+import br.edu.ifg.luziania.p3.mvc.util.LogUtil;
 
 public class UsuarioDAO {
 
@@ -76,25 +77,49 @@ public class UsuarioDAO {
         return autenticarRetornandoUsuario(login, senha) != null;
     }
 
+    public Usuario buscarPorLoginOuEmail(String loginOuEmail) {
+        String sql = """
+        SELECT id, username, email, caminho_foto
+        FROM usuarios
+        WHERE username = ? OR email = ?
+        LIMIT 1
+        """;
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, loginOuEmail);
+            ps.setString(2, loginOuEmail);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getString("caminho_foto")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            LogUtil.registrarErro("UsuarioDAO.buscarPorLoginOuEmail", e);
+        }
+        return null;
+    }
+
     /**
      * Cadastra um novo usuário no banco.
+     * A senha é armazenada em texto plano por ora
+     * (idealmente deveria usar BCrypt ou similar).
      */
-    public boolean cadastrar(String username, String email, String senha) {
+    public void cadastrar(String username, String email, String senha) {
         String sql = "INSERT INTO usuarios (username, email, senha) VALUES (?, ?, ?)";
         try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, email);
-            stmt.setString(3, senha); // TODO: hash antes de salvar
-
-            stmt.executeUpdate();
-            registrarLogUso("Usuário '" + username + "' cadastrado com sucesso.");
-            return true;
-
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, email);
+            ps.setString(3, senha);
+            ps.executeUpdate();
         } catch (SQLException e) {
-            registrarLogExcecao("cadastrar", e);
-            return false;
+            LogUtil.registrarErro("UsuarioDAO.cadastrar", e);
+            throw new RuntimeException("Erro ao cadastrar usuário: " + e.getMessage(), e);
         }
     }
 
@@ -222,42 +247,6 @@ public class UsuarioDAO {
 
     private void registrarLogExcecao(String metodo, Exception e) {
         System.err.println("[DAO ERRO] UsuarioDAO." + metodo + " - " + e.getMessage());
-    }
-
-    public Usuario buscarPorLoginOuEmail(String login) {
-        String sql = "SELECT id, username, email, caminho_foto " +
-                "FROM usuarios " +
-                "WHERE email = ? OR username = ?";
-
-        try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, login);
-            stmt.setString(2, login);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                String caminhoFoto = rs.getString("caminho_foto");
-
-                // CORREÇÃO: Previne o erro do FXML definindo um avatar padrão
-                // para usuários recém-criados que ainda não possuem foto
-                if (caminhoFoto == null || caminhoFoto.trim().isEmpty()) {
-                    caminhoFoto = "/br/edu/ifg/luziania/p3/mvc/view/img/novo_usuario.jpg";
-                }
-
-                return new Usuario(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("email"),
-                        caminhoFoto
-                );
-            }
-        } catch (SQLException e) {
-            registrarLogExcecao("buscarPorLoginOuEmail", e);
-        }
-
-        return null;
     }
 
     /**
