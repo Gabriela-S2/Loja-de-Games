@@ -1,0 +1,3 @@
+[02/06/2026 21:18:01] [USO] [Autenticação] Usuário 'Gabi' — Login realizado com sucesso
+[02/06/2026 21:24:53] [USO] [Autenticação] Usuário 'Gabi' — Login realizado com sucesso
+[02/06/2026 21:30:57] [USO] [Autenticação] Usuário 'Gabi' — Login realizado com sucesso

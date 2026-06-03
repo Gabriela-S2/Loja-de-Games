@@ -37,7 +37,7 @@
                 <!-- Logo -->
                 <ImageView fitHeight="40.0" fitWidth="44.0" preserveRatio="true"
                            style="-fx-padding: 0 6 0 8;">
-                    <image><Image url="@img/logo-steam.png"/></image>
+                    <image><Image url="@img/vertical/logo-steam.png"/></image>
                     <HBox.margin><Insets left="8" right="4"/></HBox.margin>
                 </ImageView>
 
@@ -112,7 +112,7 @@
                                style="-fx-font-weight: bold; -fx-font-size: 11;">
                         </Label>
                         <Separator/>
-                        <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER"
+                        <ScrollPane hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
                                     style="-fx-background-color: transparent; -fx-background: transparent;"
                                     VBox.vgrow="ALWAYS">
                             <content>

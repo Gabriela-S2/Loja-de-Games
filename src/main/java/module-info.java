@@ -13,7 +13,8 @@ module br.edu.ifg.luziania.p3 {
     requires java.sql;
     requires javax.mail.api;
     requires java.desktop;
-
+    requires io.github.cdimascio.dotenv.java;
+    requires jdk.jsobject;
 
     exports br.edu.ifg.luziania.p3.mvc.app;
     opens br.edu.ifg.luziania.p3.mvc.controller to javafx.fxml;

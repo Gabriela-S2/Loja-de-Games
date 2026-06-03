@@ -3,19 +3,27 @@ package br.edu.ifg.luziania.p3.mvc.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvException;
 
 public class ConexaoDB {
-    // Ajuste o nome do banco, usuário e senha conforme sua configuração local
-    private static final String URL = "jdbc:postgresql://192.168.110.128:5432/p3";
-    private static final String USUARIO = "gabi";
-    private static final String SENHA = "1G@briela";
 
     public static Connection getConexao() throws SQLException {
         try {
-            // O driver já está no seu pom.xml
+
+            Dotenv dotenv = Dotenv.configure().load();
+
+            final String URL = dotenv.get("URL");
+            final String USUARIO = dotenv.get("USUARIO");
+            final String SENHA = dotenv.get("SENHA");
+
             return DriverManager.getConnection(URL, USUARIO, SENHA);
+
+        } catch (DotenvException e) {
+            System.err.println("CRÍTICO: Arquivo .env não encontrado na raiz do projeto ou erro na leitura!");
+            throw new RuntimeException("Erro ao carregar variáveis de ambiente", e);
         } catch (SQLException e) {
-            System.err.println("Erro ao conectar ao banco: " + e.getMessage());
+            System.err.println("Erro ao conectar ao banco de dados. Verifique suas credenciais no .env.");
             throw e;
         }
     }

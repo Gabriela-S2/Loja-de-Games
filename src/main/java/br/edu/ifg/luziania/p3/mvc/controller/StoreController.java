@@ -119,26 +119,44 @@ public class StoreController implements Initializable {
         var usuario = SessaoUsuario.getInstancia().getUsuario();
         if (usuario != null) {
             // Define o nome ao lado da foto
-            lblNomeUsuario.setText(" "+usuario.getUsername());
+            lblNomeUsuario.setText(" " + usuario.getUsername());
 
             String caminhoFoto = usuario.getCaminhoFoto();
+            boolean fotoCarregadaComSucesso = false;
+
             if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
                 try {
-                    Image imgPerfil;
+                    Image imgPerfil = null;
 
-                    // Verifica se a imagem é um recurso interno do projeto (classpath) ou um arquivo externo
+                    // Verifica se a imagem é um recurso interno ou externo
                     if (caminhoFoto.startsWith("/")) {
-                        // Carrega a imagem padrão embutida no projeto
-                        imgPerfil = new Image(getClass().getResourceAsStream(caminhoFoto));
+                        var stream = getClass().getResourceAsStream(caminhoFoto);
+                        if (stream != null) {
+                            imgPerfil = new Image(stream);
+                        }
                     } else {
-                        // Carrega a imagem personalizada da pasta "uploads/perfil"
                         imgPerfil = new Image("file:" + caminhoFoto);
                     }
 
-                    // A mágica: preenche o círculo com a foto do usuário
-                    circuloUsuario.setFill(new ImagePattern(imgPerfil));
+                    // Verifica se a imagem não é nula E se não quebrou ao carregar (arquivo ausente)
+                    if (imgPerfil != null && !imgPerfil.isError()) {
+                        circuloUsuario.setFill(new ImagePattern(imgPerfil));
+                        fotoCarregadaComSucesso = true;
+                    }
                 } catch (Exception e) {
-                    LogUtil.registrarErro("Erro ao carregar foto de perfil na Store", e);
+                    LogUtil.registrarErro("Erro ao tentar carregar foto de perfil do banco", e);
+                }
+            }
+
+            // Fallback (Plano B): Se não tinha foto no banco, ou se o arquivo sumiu do computador
+            if (!fotoCarregadaComSucesso) {
+                try {
+                    var streamPadrao = getClass().getResourceAsStream("/br/edu/ifg/luziania/p3/mvc/view/img/novo_usuario.jpg");
+                    if (streamPadrao != null) {
+                        circuloUsuario.setFill(new ImagePattern(new Image(streamPadrao)));
+                    }
+                } catch (Exception e) {
+                    LogUtil.registrarErro("Erro ao carregar a foto padrão", e);
                 }
             }
         }
@@ -155,6 +173,12 @@ public class StoreController implements Initializable {
         preencherCatalogo(todosOsJogos);
         preencherBiblioteca(todosOsJogos);
         preencherLateral(todosOsJogos);
+    }
+
+    private String imagemHorizontalOuPadrao(Jogo j) {
+        return (j.getCaminhoImagemHorizontal() != null && !j.getCaminhoImagemHorizontal().isBlank())
+                ? j.getCaminhoImagemHorizontal()
+                : j.getCaminhoImagemVertical();
     }
 
     /** Preenche os três banners com jogos aleatórios (horizontal). */
@@ -174,15 +198,9 @@ public class StoreController implements Initializable {
         jogoBannerSecundario1 = fonte.size() > 1 ? fonte.get(1) : fonte.get(0);
         jogoBannerSecundario2 = fonte.size() > 2 ? fonte.get(2) : fonte.get(0);
 
-        carregarImagem(imgBannerPrincipal,   imagemHorizontalOuPadrao(jogoBannerPrincipal));
+        carregarImagem(imgBannerPrincipal, imagemHorizontalOuPadrao(jogoBannerPrincipal));
         carregarImagem(imgBannerSecundario1, imagemHorizontalOuPadrao(jogoBannerSecundario1));
         carregarImagem(imgBannerSecundario2, imagemHorizontalOuPadrao(jogoBannerSecundario2));
-    }
-
-    private String imagemHorizontalOuPadrao(Jogo j) {
-        return (j.getCaminhoImagemHorizontal() != null && !j.getCaminhoImagemHorizontal().isBlank())
-                ? j.getCaminhoImagemHorizontal()
-                : j.getCaminhoImagem();
     }
 
     private void preencherCatalogo(List<Jogo> jogos) {
@@ -229,14 +247,14 @@ public class StoreController implements Initializable {
         VBox card = new VBox(5);
         card.setStyle("-fx-background-color: #2a475e; -fx-background-radius: 4; -fx-padding: 4;");
         card.setCursor(javafx.scene.Cursor.HAND);
-        card.setPrefWidth(115);
+        card.setPrefWidth(114);
 
         ImageView img = new ImageView();
         img.setFitWidth(107);
         img.setFitHeight(155);
         img.setPreserveRatio(true);
         img.setSmooth(true);
-        carregarImagem(img, jogo.getCaminhoImagem());
+        carregarImagem(img, jogo.getCaminhoImagemVertical());
 
         Label titulo = new Label(jogo.getTitulo());
         titulo.setTextFill(Color.WHITE);

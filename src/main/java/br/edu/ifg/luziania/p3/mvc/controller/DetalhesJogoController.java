@@ -77,8 +77,8 @@ public class DetalhesJogoController implements Initializable {
 
         // Capa grande (prefere imagem vertical; fallback padrão)
         String caminhoCapa = (jogo.getCaminhoImagemVertical() != null
-                && !jogo.getCaminhoImagemVertical().isBlank())
-                ? jogo.getCaminhoImagemVertical()
+                && !jogo.getCaminhoImagemHorizontal().isBlank())
+                ? jogo.getCaminhoImagemHorizontal()
                 : jogo.getCaminhoImagem();
         carregarImagem(imgCapaGrande, caminhoCapa);
 

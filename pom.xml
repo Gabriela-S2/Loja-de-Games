@@ -36,6 +36,12 @@
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
+      <artifactId>jdk-jsobject</artifactId>
+      <version>27-ea+18</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>21.0.6</version>
     </dependency>
@@ -124,6 +130,11 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.0.0</version>
     </dependency>
   </dependencies>
 
